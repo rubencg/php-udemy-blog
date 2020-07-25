@@ -10,7 +10,7 @@
                     <a href="#">Add posts</a>
                 </li>
                 <li>
-                    <a href="#">View all posts</a>
+                    <a href="posts.php">View all posts</a>
                 </li>
             </ul>
         </li>

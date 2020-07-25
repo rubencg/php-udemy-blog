@@ -1,12 +1,15 @@
-<?php include 'includes/db.php'; ?>
-<!-- Header -->
+<?php include 'includes/db.php';
+
+?>
+
+    <!-- Header -->
 <?php include 'includes/header.php'; ?>
 
-<!-- Navigation -->
+    <!-- Navigation -->
 <?php include 'includes/nav.php'; ?>
 
-<!-- jQuery -->
-<div class="container">
+    <!-- jQuery -->
+    <div class="container">
 
     <div class="row">
 
@@ -18,23 +21,49 @@
                 <small>Secondary Text</small>
             </h1>
 
-            <!-- First Blog Post -->
-            <h2>
-                <a href="#">Blog Post Title</a>
-            </h2>
-            <p class="lead">
-                by <a href="index.php">Start Bootstrap</a>
-            </p>
-            <p><span class="glyphicon glyphicon-time"></span> Posted on August 28, 2013 at 10:00 PM</p>
-            <hr>
-            <img class="img-responsive" src="http://placehold.it/900x300" alt="">
-            <hr>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore, veritatis, tempora, necessitatibus
-                inventore nisi quam quia repellat ut tempore laborum possimus eum dicta id animi corrupti debitis ipsum
-                officiis rerum.</p>
-            <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+            <?php
 
+            $query = '';
+            if (!empty($_POST)) {
+                if (isset($_POST['search'])) {
+                    $searchBy = strtolower($_POST['search']);
+                    $query = "title like lower('%{$searchBy}%') OR tags like lower('%{$searchBy}%')";
+                }
+            }
 
+            $posts = R::find('posts', $query);
+
+            if (empty($posts)) {
+                echo "<h3>No results</h3>";
+            } else {
+                foreach ($posts as $post) {
+                    $date = date("F d Y", strtotime($post['date']));
+                    ?>
+                    <h2>
+                        <a href="#"><?php echo $post['title'] ?></a>
+                    </h2>
+
+                    <p class="lead">
+                        by <a href="index.php"><?php echo $post['author'] ?></a>
+                    </p>
+
+                    <p>
+                        <span class="glyphicon glyphicon-time"></span> Posted on <?php echo $date ?>
+                    </p>
+                    <hr>
+                    <img src="<?php echo $post['image']; ?>" class="img-responsive" alt=""/>
+                    <hr>
+
+                    <p>
+                        <?php echo $post['content']; ?>
+                    </p>
+
+                    <a href="#" class="btn btn-primary"> Read More <span
+                                class="glyphicon glyphicon-chevron-right"></span></a>
+                    <?php
+                }
+            }
+            ?>
         </div>
 
         <!-- Blog Sidebar Widgets Column -->

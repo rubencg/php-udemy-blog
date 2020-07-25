@@ -1,4 +1,5 @@
 <?php include "includes/header.php" ?>
+<?php include "functions.php" ?>
 
 <div id="wrapper">
 
@@ -19,22 +20,12 @@
 
                     <div class="col-xs-6">
                         <?php
-                        // Delete category
-                        if (isset($_GET['delete'])) {
-                            $category = R::load('categories', $_GET['delete']);
-                            R::trash($category);
-                            header("Location: categories.php");
-                        }
+                        deleteCategories();
                         ?>
                         <div class="row">
                             <form action="" method="post">
                                 <?php
-                                // Add category
-                                if (isset($_POST['title']) && !empty($_POST['title'])) {
-                                    $category = R::dispense('categories');
-                                    $category->title = $_POST['title'];
-                                    R::store($category);
-                                }
+                                insertCategories();
                                 ?>
                                 <div class="form-group">
                                     <label for="title">Add Category</label>
@@ -45,13 +36,7 @@
                         </div>
                         <br>
                         <?php
-                        // Edit
-                        if (isset($_POST['edit_title']) && isset($_GET['edit'])) {
-                            $category = R::load('categories', $_GET['edit']);
-                            $category->title = $_POST['edit_title'];
-                            R::store( $category );
-                            header("Location: categories.php");
-                        }
+                        editCetegory();
 
                         if (isset($_GET['edit'])) {
                             $category = R::load('categories', $_GET['edit']);
@@ -63,7 +48,8 @@
                                     ?>
                                     <div class="form-group">
                                         <label for="title">Edit Category</label>
-                                        <input autofocus="autofocus" class="form-control" type="text" name="edit_title" value="<?php echo $category->title; ?>">
+                                        <input autofocus="autofocus" class="form-control" type="text" name="edit_title"
+                                               value="<?php echo $category->title; ?>">
                                     </div>
                                     <button type="submit" class="btn btn-primary">Update category</button>
                                 </form>
